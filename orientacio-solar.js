@@ -1,0 +1,19 @@
+const rad=Math.PI/180;
+function solarAzimuth(instant,lat,lon){
+ const jd=instant.getTime()/86400000+2440587.5,T=(jd-2451545)/36525;
+ const norm=x=>(x%360+360)%360;
+ const L0=norm(280.46646+T*(36000.76983+0.0003032*T)),M=norm(357.52911+T*(35999.05029-0.0001537*T));
+ const ecc=0.016708634-T*(0.000042037+0.0000001267*T);
+ const C=(1.914602-T*(0.004817+0.000014*T))*Math.sin(M*rad)+(0.019993-0.000101*T)*Math.sin(2*M*rad)+0.000289*Math.sin(3*M*rad);
+ const trueLon=L0+C,omega=125.04-1934.136*T,lambda=trueLon-0.00569-0.00478*Math.sin(omega*rad);
+ const eps0=23+(26+(21.448-T*(46.815+T*(0.00059-T*0.001813)))/60)/60;
+ const eps=eps0+0.00256*Math.cos(omega*rad);
+ const decl=Math.asin(Math.sin(eps*rad)*Math.sin(lambda*rad));
+ const y=Math.tan(eps*rad/2)**2;
+ const E=4/rad*(y*Math.sin(2*L0*rad)-2*ecc*Math.sin(M*rad)+4*ecc*y*Math.sin(M*rad)*Math.cos(2*L0*rad)-0.5*y*y*Math.sin(4*L0*rad)-1.25*ecc*ecc*Math.sin(2*M*rad));
+ const minutes=instant.getUTCHours()*60+instant.getUTCMinutes()+instant.getUTCSeconds()/60+instant.getUTCMilliseconds()/60000;
+ const ha=(norm((minutes+E+4*lon)/4)-180)*rad,phi=lat*rad;
+ const alt=Math.asin(Math.sin(phi)*Math.sin(decl)+Math.cos(phi)*Math.cos(decl)*Math.cos(ha));
+ const az=norm(Math.atan2(Math.sin(ha),Math.cos(ha)*Math.sin(phi)-Math.tan(decl)*Math.cos(phi))/rad+180);
+ return {az,alt:alt/rad,decl:decl/rad,eot:E,ha:ha/rad};
+}
