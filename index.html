@@ -1,6 +1,110 @@
-<!doctype html><html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10243a"><link rel="manifest" href="manifest.webmanifest"><title>Rellotge Analemàtic</title><style>
-:root{font-family:system-ui,-apple-system,sans-serif;color:#152c40;background:#f3f6f8}*{box-sizing:border-box}body{margin:0}header{background:#10243a;color:white;padding:18px max(18px,calc((100vw - 1200px)/2))}h1{margin:0;font-size:1.5rem}header p{margin:5px 0;color:#bed2e1}.wrap{max-width:1200px;margin:auto;padding:18px;display:grid;grid-template-columns:320px 1fr;gap:16px}.panel{background:white;border-radius:15px;padding:19px;box-shadow:0 2px 13px #18364c13}.panel h2{font-size:1.05rem;margin:0 0 14px}label{display:block;font-size:.86rem;font-weight:650;margin:12px 0 4px}input,select{width:100%;padding:10px;border:1px solid #c6d1da;border-radius:8px;font-size:1rem;background:white;color:#152c40}button{background:#146a8d;color:white;border:0;border-radius:9px;padding:11px 13px;cursor:pointer;font-weight:650}button.secondary{background:#e5eff4;color:#17415a}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}#drawing{width:100%;height:auto;display:block}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem}.legend span:before{content:'●';margin-right:5px}.solar{color:#b17c00}.winter{color:#2477bc}.summer{color:#14976d}.analemma{color:#bd4280}.muted{font-size:.82rem;color:#526777;line-height:1.5}.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat div{background:#f0f5f8;border-radius:9px;padding:11px;font-size:.78rem}.stat strong{display:block;font-size:1.1rem;margin-top:5px}table{border-collapse:collapse;width:100%;font-size:.82rem}th,td{border-bottom:1px solid #e1e8ed;padding:7px;text-align:right}th:first-child,td:first-child{text-align:left}.scroll{max-height:300px;overflow:auto}.wide{grid-column:2}small{font-size:.78rem}@media(max-width:800px){.wrap{grid-template-columns:1fr}.wide{grid-column:1}.stat{grid-template-columns:1fr 1fr 1fr}}@media print{header,.controls,.buttons,.note{display:none}.wrap{display:block}.panel{box-shadow:none;break-inside:avoid}#drawing{max-height:75vh}}
- .meridian-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.meridian-grid label{margin-top:0}.result{background:#eef5f8;padding:13px;border-radius:10px;line-height:1.7}.warning{border-left:4px solid #c98520;padding:9px 12px;background:#fff6e7}.meridian-svg{width:100%;max-width:580px;height:auto;display:block;margin:auto}@media(max-width:540px){.meridian-grid{grid-template-columns:1fr}} details.coord-details{border:1px solid #d9e3ea;border-radius:10px;margin:12px 0;overflow:hidden}details.coord-details summary{cursor:pointer;padding:14px 16px;font-weight:700;background:#edf4f8;list-style-position:inside}details.coord-details[open] summary{border-bottom:1px solid #d9e3ea}details.coord-details .scroll{max-height:440px;overflow:auto}details.coord-details table{width:100%}details.coord-details thead{position:sticky;top:0;background:#eef4f8}details.coord-details td,details.coord-details th{white-space:nowrap} .coord-note{padding:0 14px;font-size:.88rem;color:#526777}</style></head><body><header><h1>☀ Rellotge analemàtic</h1><p>Disseny de rellotges de sol a terra · Versió 9.5 · UTC, marques solars i analema diari</p></header><main class="wrap"><section class="panel controls"><h2>Configuració</h2><label>Nom del projecte</label><input id="name" value="Rellotge de prova"><label>Latitud (°; nord positiu)</label><input id="lat" type="number" step="0.0001" value="39.5858"><label>Longitud (°; est positiu)</label><input id="lon" type="number" step="0.0001" value="2.6586"><label>Semieix major A (metres)</label><input id="a" type="number" step="0.1" min="0.5" value="2.5"><label>Interval de marques</label><select id="step"><option value="1">Cada hora</option><option value="0.5">Cada mitja hora</option></select><label>Primera hora UTC</label><input id="from" type="number" min="0" max="23" value="6"><label>Darrera hora UTC</label><input id="to" type="number" min="1" max="24" value="18"><label>Data de simulació</label><input id="date" type="date" value="2026-11-02"><label>Hora oficial de simulació</label><input id="time" type="time" value="12:00"><div class="buttons"><button id="reset" class="secondary">Restablir</button><button id="save">Desar al dispositiu</button></div><p class="muted">Els valors inicials de latitud, longitud i semieix provenen del full de referència. Les unitats de construcció són metres.</p></section><section class="panel"><h2>Plànol interactiu · vista zenital</h2><div class="legend"><span class="solar">UTC</span><span style="color:#8c729b">Solar (romans)</span><span class="winter">Hivern</span><span class="summer">Estiu</span><span class="analemma">Posició del gnòmon</span></div><svg id="drawing" viewBox="0 0 800 680" role="img" aria-label="Plànol geomètric del rellotge"></svg><div class="stat"><div>Semieix menor B<strong id="bval"></strong></div><div>Focus F1–F2<strong id="cval"></strong></div><div>Gnòmon avui<strong id="gval"></strong></div></div><p class="muted" id="focusinfo"></p><div class="buttons"><button id="svg">Exportar SVG</button><button id="csv" class="secondary">Marques CSV</button><button id="gnomonCSV" class="secondary">Punts diaris CSV</button><button id="print" class="secondary">Imprimir / PDF</button></div></section><section class="panel wide"><h2>Coordenades de construcció</h2><p class="muted">Origen (0,0): centre de l'el·lipse. X positiu cap a l'est; Y positiu cap al nord. Alinea l'eix vertical amb el nord geogràfic, no amb el magnètic.</p><details class="coord-details" id="hourDetails"><summary>Marques horàries · <span id="hourCount">0</span> coordenades</summary><div class="scroll"><table><thead><tr><th>Hora UTC de marca*</th><th>X est (m)</th><th>Y nord (m)</th><th>Hivern</th><th>Estiu</th></tr></thead><tbody id="rows"></tbody></table></div></details><details class="coord-details" id="dayDetails"><summary>Analema diari · <span id="dayCount">365</span> coordenades</summary><p class="coord-note">Coordenades en metres ajustades als raigs solars de cada data. El punt del dia de simulació es destaca. Consultau el diagnòstic de precisió abans de construir.</p><div class="scroll"><table><thead><tr><th>Data</th><th>X est (m)</th><th>Y nord (m)</th><th>EOT (min)</th><th>Declinació (°)</th><th>Error RMS (min)</th><th>Error màxim (min)</th></tr></thead><tbody id="dayRows"></tbody></table></div></details></section><section class="panel wide" id="meridiana"><p><a href="meridiana-m1.html" style="display:inline-block;background:#18775b;color:white;padding:12px 16px;border-radius:9px;text-decoration:none;font-weight:700;margin-right:8px">Meridiana Solar M1 · semicercle 180°</a> <a href="orientacio-ombres.html" style="display:inline-block;background:#146a8d;color:white;padding:12px 16px;border-radius:9px;text-decoration:none;font-weight:700">Obrir meridiana de precisió · Mode C</a></p></section><section class="panel wide note"><h2>Motor astronòmic i límits de precisió</h2><p class="muted"><strong>Motor:</strong> NOAA/Meeus local. Els punts diaris es calculen amb un ajust de mínims quadrats de la posició del gnòmon a les direccions solars de cada hora UTC mostrada, sempre que l'altura solar superi 15°. Les marques UTC són fixes sobre l'el·lipse i la taula mostra l'error angular residual aproximat en minuts. <strong>Cap ajust diari pot fer exactes simultàniament totes les hores.</strong> L'error de lectura real dependrà també de la longitud i definició de l'ombra, del gruix de les marques i de la interpolació. Les etiquetes d'hivern i estiu són conversions UTC+1 i UTC+2, no dues escales físiques independents. Per construir, verificau orientació, mesures i ombres in situ. No s'inclou refracció atmosfèrica ni obstacles.</p><p id="simulation"></p></section></main><script>
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102d3d">
+<meta name="description" content="Dissenya, orienta i construeix el teu rellotge analemàtic amb AstroMallorca.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="ui.css">
+<title>Rellotge analemàtic · AstroMallorca</title>
+</head>
+<body class="app-shell">
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="38" height="38"><circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 4v6m0 20v6M4 20h6m20 0h6M8.7 8.7l4.2 4.2m14.2 14.2 4.2 4.2m0-22.6-4.2 4.2M12.9 27.1l-4.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="brand-titles"><span class="brand-name">AstroMallorca <span class="brand-dot">·</span> Eines</span><span class="brand-subtitle">Rellotge analemàtic</span></div>
+    <div class="header-right"><span class="version-label">V 9.6</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
+  </div>
+</header>
+<nav class="tab-navigation" aria-label="Seccions de l'aplicació">
+  <div class="nav-inner" role="tablist" aria-label="Pantalles principals">
+    <button type="button" class="nav-tab active" id="tab-disseny" data-tab="disseny" role="tab" aria-controls="view-disseny" aria-selected="true"><span class="nav-symbol" aria-hidden="true">◉</span><span>Disseny</span></button>
+    <button type="button" class="nav-tab" id="tab-analema" data-tab="analema" role="tab" aria-controls="view-analema" aria-selected="false"><span class="nav-symbol" aria-hidden="true">∞</span><span>Analema</span></button>
+    <button type="button" class="nav-tab" id="tab-construccio" data-tab="construccio" role="tab" aria-controls="view-construccio" aria-selected="false"><span class="nav-symbol" aria-hidden="true">⌗</span><span>Construcció</span></button>
+    <button type="button" class="nav-tab" id="tab-meridiana" data-tab="meridiana" role="tab" aria-controls="view-meridiana" aria-selected="false"><span class="nav-symbol" aria-hidden="true">↟</span><span>Meridiana</span></button>
+    <button type="button" class="nav-tab" id="tab-ajuda" data-tab="ajuda" role="tab" aria-controls="view-ajuda" aria-selected="false"><span class="nav-symbol" aria-hidden="true">?</span><span>Ajuda</span></button>
+  </div>
+</nav>
+<main class="app-main">
+  <section class="app-view active" id="view-disseny" role="tabpanel" aria-labelledby="tab-disseny">
+    <div class="page-heading"><div><span class="eyebrow">01 / DISSENY</span><h1>Dissenya el teu rellotge</h1><p>Defineix el lloc i les dimensions. El plànol s'actualitza automàticament.</p></div></div>
+    <div class="design-grid">
+      <section class="surface form-surface" aria-labelledby="design-settings-title">
+        <div class="surface-heading"><div><span class="subheading">PARÀMETRES</span><h2 id="design-settings-title">Configuració</h2></div></div>
+        <div class="field"><label for="name">Nom del projecte</label><input id="name" value="Rellotge de prova" autocomplete="off"></div>
+        <div class="field-grid"><div class="field"><label for="lat">Latitud <span class="unit">°</span></label><input id="lat" type="number" step="0.0001" value="39.5858" inputmode="decimal"></div><div class="field"><label for="lon">Longitud <span class="unit">°</span></label><input id="lon" type="number" step="0.0001" value="2.6586" inputmode="decimal"></div></div>
+        <div class="field"><label for="a">Semieix major <span class="unit">metres</span></label><div class="input-suffix"><input id="a" type="number" step="0.1" min="0.5" value="2.5" inputmode="decimal"><span aria-hidden="true">m</span></div></div>
+        <div class="field"><label for="date">Dia de referència</label><input id="date" type="date" value="2026-11-02"></div>
+        <details class="fold"><summary>Opcions horàries <span class="fold-hint">UTC · simulació</span></summary><div class="fold-content">
+          <div class="field"><label for="step">Interval de marques</label><select id="step"><option value="1">Cada hora</option><option value="0.5">Cada mitja hora</option></select></div>
+          <div class="field-grid"><div class="field"><label for="from">Primera hora UTC</label><input id="from" type="number" min="0" max="23" value="6"></div><div class="field"><label for="to">Darrera hora UTC</label><input id="to" type="number" min="1" max="24" value="18"></div></div>
+          <div class="field"><label for="time">Hora oficial de simulació</label><input id="time" type="time" value="12:00"></div>
+          <p class="hint">Les hores UTC defineixen les marques fixes. Hivern i estiu només canvien l'etiqueta horària.</p>
+        </div></details>
+        <div class="form-actions"><button type="button" id="save" class="btn btn-primary">Desar projecte</button><button type="button" id="reset" class="btn btn-quiet">Restablir</button></div>
+        <p class="hint form-footnote">Les mesures de construcció s'expressen en metres.</p>
+      </section>
+      <section class="surface plan-surface" aria-labelledby="plan-heading">
+        <div class="surface-heading"><div><span class="subheading">PLÀNOL</span><h2 id="plan-heading">Vista superior</h2></div><span class="direction-chip">N ↑ &nbsp; E →</span></div>
+        <div class="legend"><span class="solar">UTC</span><span class="solar-hours">Solar (romans)</span><span class="winter">Hivern</span><span class="summer">Estiu</span><span class="analemma">Gnòmon</span></div>
+        <div class="drawing-frame"><svg id="drawing" viewBox="0 0 800 680" role="img" aria-label="Plànol geomètric del rellotge"></svg></div>
+        <div class="stat"><div><span>Semieix menor B</span><strong id="bval">—</strong></div><div><span>Focus F1–F2</span><strong id="cval">—</strong></div><div><span>Gnòmon · dia seleccionat</span><strong id="gval">—</strong></div></div>
+        <div class="plan-footer"><span>Plànol orientatiu a escala de pantalla</span><button type="button" class="inline-action" data-goto="construccio">Veure mesures de construcció <span aria-hidden="true">→</span></button></div>
+      </section>
+    </div>
+  </section>
+  <section class="app-view" id="view-analema" role="tabpanel" aria-labelledby="tab-analema" hidden>
+    <div class="page-heading"><div><span class="eyebrow">02 / ANALEMA</span><h1>Posició diària del gnòmon</h1><p>Explora el traçat anual i consulta la posició del dia que construiràs.</p></div></div>
+    <div class="analemma-grid">
+      <section class="surface" aria-labelledby="analemma-heading">
+        <div class="surface-heading"><div><span class="subheading">TRAÇAT ANUAL</span><h2 id="analemma-heading">Analema ampliat</h2></div><span class="accent-key"><i></i> Dia seleccionat</span></div>
+        <div class="analemma-figure"><svg id="analemmaDrawing" viewBox="0 0 700 490" role="img" aria-label="Vista ampliada de l'analema i el punt del dia"></svg></div>
+        <p class="hint">Vista ampliada per llegir el recorregut. Per marcar el terreny, utilitza les coordenades en metres de Construcció.</p>
+      </section>
+      <aside class="surface analemma-detail">
+        <div class="surface-heading"><div><span class="subheading">CONSULTA</span><h2>Un dia concret</h2></div></div>
+        <div class="field"><label for="analemmaDate">Data</label><input type="date" id="analemmaDate" value="2026-11-02"></div>
+        <div class="featured-value"><span>Posició del gnòmon</span><strong id="analemmaCurrent">—</strong><small>Origen: centre de l'el·lipse · X est / Y nord</small></div>
+        <div class="mini-measure"><span>Precisió de l'ajust</span><strong id="analemmaAccuracy">—</strong></div>
+        <button type="button" class="btn btn-secondary btn-block" data-goto="construccio">Obrir coordenades diàries</button>
+        <p class="hint">La corba mostra els punts calculats, no una trajectòria exacta sense error a totes les hores.</p>
+      </aside>
+    </div>
+  </section>
+  <section class="app-view" id="view-construccio" role="tabpanel" aria-labelledby="tab-construccio" hidden>
+    <div class="page-heading"><div><span class="eyebrow">03 / CONSTRUCCIÓ</span><h1>Del plànol al terreny</h1><p>Mesures, coordenades i arxius per marcar el rellotge sobre una superfície real.</p></div></div>
+    <section class="surface construction-overview"><div class="surface-heading"><div><span class="subheading">REFERÈNCIES</span><h2>Mesures essencials</h2></div></div><p id="focusinfo" class="measure-description"></p><div class="reference-strip"><span><b>Origen</b> (0, 0) · centre</span><span><b>X positiu</b> cap a l'est</span><span><b>Y positiu</b> cap al nord</span></div></section>
+    <section class="surface exports"><div class="surface-heading"><div><span class="subheading">FITXERS</span><h2>Exportar el projecte</h2></div></div><div class="export-buttons"><button type="button" id="svg" class="btn btn-primary">Descarregar plànol SVG</button><button type="button" id="csv" class="btn btn-secondary">Marques horàries CSV</button><button type="button" id="gnomonCSV" class="btn btn-secondary">Analema diari CSV</button><button type="button" id="print" class="btn btn-quiet">Imprimir / PDF</button></div></section>
+    <section class="surface coords-surface"><div class="surface-heading"><div><span class="subheading">DETALL DE REPLANTEIG</span><h2>Coordenades</h2></div></div>
+      <details class="fold coord-details" id="hourDetails"><summary>Marques horàries <span class="fold-hint"><span id="hourCount">0</span> punts</span></summary><div class="table-scroll"><table><thead><tr><th>UTC de marca*</th><th>X est (m)</th><th>Y nord (m)</th><th>Hivern</th><th>Estiu</th></tr></thead><tbody id="rows"></tbody></table></div></details>
+      <details class="fold coord-details" id="dayDetails"><summary>Analema diari <span class="fold-hint"><span id="dayCount">365</span> punts</span></summary><p class="hint inset-note">Coordenades diàries ajustades als raigs solars de les marques UTC. Consultau els errors residuals abans de construir.</p><div class="table-scroll"><table><thead><tr><th>Data</th><th>X est (m)</th><th>Y nord (m)</th><th>EOT (min)</th><th>Declinació (°)</th><th>Error RMS (min)</th><th>Error màxim (min)</th></tr></thead><tbody id="dayRows"></tbody></table></div></details>
+    </section>
+  </section>
+  <section class="app-view" id="view-meridiana" role="tabpanel" aria-labelledby="tab-meridiana" hidden>
+    <div class="page-heading"><div><span class="eyebrow">04 / MERIDIANA</span><h1>Troba el nord geogràfic</h1><p>Dos procediments solars per traçar l'eix nord-sud sense brúixola magnètica.</p></div></div>
+    <div class="tool-grid" id="meridiana">
+      <a class="tool-card surface" href="meridiana-m1.html"><span class="tool-icon" aria-hidden="true">◒</span><span class="tool-meta">MÈTODE RÀPID · M1</span><strong>Semicercle solar</strong><span>Vareta vertical i escala de 180°. Alinea l'ombra amb els 90° i llegeix la meridiana calculada.</span><span class="tool-link">Obrir Meridiana M1 →</span></a>
+      <a class="tool-card surface" href="orientacio-ombres.html"><span class="tool-icon" aria-hidden="true">△</span><span class="tool-meta">MÈTODE ALTERNATIU · C</span><strong>Triangulació amb ombres</strong><span>Marca la base i l'extrem de l'ombra. Calcula les distàncies per traçar l'eix al terreny.</span><span class="tool-link">Obrir Mode C →</span></a>
+    </div>
+    <p class="meridian-note">Ambdós mètodes necessiten Sol visible, una referència vertical i l'hora correcta. Comprovau sempre la direcció sobre el terreny.</p>
+  </section>
+  <section class="app-view" id="view-ajuda" role="tabpanel" aria-labelledby="tab-ajuda" hidden>
+    <div class="page-heading"><div><span class="eyebrow">05 / AJUDA</span><h1>Construcció pas a pas</h1><p>Una guia breu per passar del càlcul al rellotge físic.</p></div></div>
+    <section class="surface help-surface"><div class="help-steps">
+      <div class="help-step"><span>01</span><div><h2>Defineix el lloc</h2><p>Indica latitud, longitud i semieix major a Disseny. Revisa que les coordenades corresponguin al lloc definitiu.</p></div></div>
+      <div class="help-step"><span>02</span><div><h2>Traça la meridiana</h2><p>Amb M1 o Mode C, determina l'eix nord-sud real. És el primer pas abans de marcar l'el·lipse.</p></div></div>
+      <div class="help-step"><span>03</span><div><h2>Marca l'el·lipse</h2><p>Assenyala el centre i els dos focus. Utilitza les distàncies i la corda indicades a Construcció.</p></div></div>
+      <div class="help-step"><span>04</span><div><h2>Col·loca les marques</h2><p>Trasllada al terreny les coordenades de les hores UTC, prenent el centre com a origen.</p></div></div>
+      <div class="help-step"><span>05</span><div><h2>Marca l'analema</h2><p>Fes servir les coordenades diàries per indicar on s'ha de col·locar el gnòmon mòbil. Verifica diverses ombres reals abans de donar el rellotge per acabat.</p></div></div>
+    </div></section>
+    <section class="surface technical"><details class="fold"><summary>Motor astronòmic i límits de precisió <span class="fold-hint">Informació tècnica</span></summary><div class="fold-content"><p class="hint"><strong>Motor:</strong> NOAA/Meeus local. Els punts diaris es calculen amb un ajust de mínims quadrats de la posició del gnòmon a les direccions solars de cada hora UTC mostrada, sempre que l'altura solar superi 15°. Les marques UTC són fixes sobre l'el·lipse i la taula mostra l'error angular residual aproximat en minuts. <strong>Cap ajust diari pot fer exactes simultàniament totes les hores.</strong> L'error de lectura real depèn també de l'ombra, del gruix de les marques i de la interpolació. Les etiquetes d'hivern i estiu són conversions UTC+1 i UTC+2; no són escales físiques independents. Verificau orientació i mesures in situ. No s'hi inclouen refracció atmosfèrica ni obstacles.</p><p id="simulation" class="hint"></p></div></details></section>
+  </section>
+</main>
+<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.6</span></footer>
+<script>
 const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
 // Motor solar unificat NOAA/Meeus: mateix càlcul per a analema, simulació i meridiana.
 // No és NREL SPA. Les magnituds són aproximades i requereixen validació de camp.
@@ -117,4 +221,6 @@ function solarAzimuth(instant,lat,lon){
  return {az,alt:alt/rad,decl:decl/rad,eot:E,ha:ha/rad};
 }
 render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
-</script></body></html>
+</script>
+<script src="ui.js"></script>
+</body></html>
