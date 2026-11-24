@@ -34,3 +34,10 @@
 @media(max-width:390px){.solar-clock-metrics{grid-template-columns:1fr}.solar-clock-metrics>div{display:flex;align-items:center;justify-content:space-between;gap:9px}.solar-clock-metrics span{min-height:0}.solar-clock-metrics strong{margin-top:0;font-size:14px}.solar-time-digits{font-size:40px}}
 @media print{.solar-clock-surface{display:none!important}}
 @media(min-width:671px) and (max-width:850px){.form-surface>.field-grid,.form-surface>.device-control,.form-surface>.device-actions,.form-surface>.device-hint{grid-column:1/-1}}
+
+/* V9.8: hora de la culminació solar dins la mateixa lectura. */
+.solar-noon{margin-top:15px;padding:13px 0 0;border-top:1px solid #d7e8e3;display:flex;flex-direction:column;gap:3px}
+.solar-noon-label{font-size:11px;letter-spacing:.015em;font-weight:700;color:#4b6971}
+.solar-noon-time{font-size:clamp(27px,2.6vw,36px);letter-spacing:-.035em;line-height:1.2;color:#204558;font-weight:770;font-variant-numeric:tabular-nums}
+.solar-noon-note{font-size:10px;color:#637a81;line-height:1.45}
+@media(max-width:670px){.solar-noon{margin-top:12px;padding-top:11px}.solar-noon-time{font-size:31px}}

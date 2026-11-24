@@ -18,7 +18,7 @@
       <svg viewBox="0 0 40 40" width="38" height="38"><circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 4v6m0 20v6M4 20h6m20 0h6M8.7 8.7l4.2 4.2m14.2 14.2 4.2 4.2m0-22.6-4.2 4.2M12.9 27.1l-4.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
     <div class="brand-titles"><span class="brand-name">AstroMallorca <span class="brand-dot">·</span> Eines</span><span class="brand-subtitle">Rellotge analemàtic</span></div>
-    <div class="header-right"><span class="version-label">V 9.7</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
+    <div class="header-right"><span class="version-label">V 9.8</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
   </div>
 </header>
 <nav class="tab-navigation" aria-label="Seccions de l'aplicació">
@@ -36,7 +36,8 @@
     <section class="surface solar-clock-surface" aria-labelledby="solar-clock-title">
       <div class="solar-clock-intro"><span class="subheading">LECTURA SOLAR</span><h2 id="solar-clock-title">Hora solar aparent</h2><p>Per a la ubicació, la data i l’hora seleccionades.</p></div>
       <div class="solar-clock-body">
-        <div class="solar-clock-primary"><strong id="solarTime" class="solar-time-digits">--:--:--</strong><span id="solarDayNote" class="solar-day-note"></span><span class="solar-clock-caption">Hora del Sol · 12:00 al migdia solar</span></div>
+        <div class="solar-clock-primary"><strong id="solarTime" class="solar-time-digits">--:--:--</strong><span id="solarDayNote" class="solar-day-note"></span><span class="solar-clock-caption">Hora del Sol · 12:00 al migdia solar</span>
+          <div class="solar-noon"><span class="solar-noon-label">Migdia solar del dia seleccionat</span><strong id="solarNoonTime" class="solar-noon-time">--:--:--</strong><span id="solarNoonNote" class="solar-noon-note">Hora oficial de la culminació solar.</span></div></div>
         <div class="solar-clock-metrics"><div><span>Correcció longitud + fus</span><strong id="solarLongitudeCorrection">—</strong></div><div><span>Equació del temps</span><strong id="solarEquationCorrection">—</strong></div><div class="solar-clock-total"><span>Correcció total</span><strong id="solarTotalCorrection">—</strong></div></div>
       </div>
       <div class="solar-clock-footer"><span id="solarClockContext">Selecciona una data i una hora.</span><span id="solarClockMode">Lectura manual</span></div>
@@ -117,7 +118,7 @@
     <section class="surface technical"><details class="fold"><summary>Motor astronòmic i límits de precisió <span class="fold-hint">Informació tècnica</span></summary><div class="fold-content"><p class="hint"><strong>Motor:</strong> NOAA/Meeus local. Els punts diaris es calculen amb un ajust de mínims quadrats de la posició del gnòmon a les direccions solars de cada hora UTC mostrada, sempre que l'altura solar superi 15°. Les marques UTC són fixes sobre l'el·lipse i la taula mostra l'error angular residual aproximat en minuts. <strong>Cap ajust diari pot fer exactes simultàniament totes les hores.</strong> L'error de lectura real depèn també de l'ombra, del gruix de les marques i de la interpolació. Les etiquetes d'hivern i estiu són conversions UTC+1 i UTC+2; no són escales físiques independents. Verificau orientació i mesures in situ. No s'hi inclouen refracció atmosfèrica ni obstacles.</p><p id="simulation" class="hint"></p></div></details></section>
   </section>
 </main>
-<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.7</span></footer>
+<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.8</span></footer>
 <script>
 const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time','tzMode','tzManual'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
 // Motor solar unificat NOAA/Meeus: mateix càlcul per a analema, simulació i meridiana.

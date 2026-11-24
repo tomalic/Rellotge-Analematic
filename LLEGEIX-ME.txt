@@ -1,14 +1,15 @@
-ArsA · Rellotge analemàtic V9.7 · Data, GPS i hora solar aparent
+ArsA · Rellotge analemàtic V9.8 · Migdia solar
 
 Puja tots els arxius d’aquest ZIP a la mateixa carpeta que index.html, substituint els anteriors.
-Mantén a la carpeta els teus dos fitxers logoArsA-192.png i logoArsA-512.png: no s’inclouen al ZIP perquè són teus.
+Mantén els fitxers logoArsA-192.png i logoArsA-512.png de la teva instal·lació: no s’inclouen al ZIP.
 
-Canvis:
-- Ubicació GPS optativa (demana permís, HTTPS obligatori); latitud i longitud editables.
-- Data i hora obtingudes del dispositiu; editables manualment.
-- Opció de lectura en directe i opció de fus horari manual.
-- Hora solar aparent a la pàgina de disseny i desglossament de correcció de longitud/fus i equació del temps.
-- Fus automàtic del dispositiu, respectant l’horari d’estiu en la data triada. Si la localització és en un altre fus, usa el desfasament UTC manual.
+Nou a la versió 9.8:
+- A la pantalla Disseny, sota l’hora solar aparent, apareix l’hora civil del migdia solar (trànsit superior) per a la data i la longitud seleccionades.
+- L’hora del migdia es calcula iterativament perquè l’equació del temps correspon a l’instant del trànsit, i no simplement a les 12 h UTC.
+- El resultat incorpora el fus horari automàtic del dispositiu per a aquella data (incloent l’horari d’estiu) o el desfasament UTC manual.
+- L’hora del migdia solar s’actualitza si canvies data, longitud o fus horari; no canvia pel fet d’avançar l’hora dins un mateix dia.
+- Amb fusos incompatibles amb la longitud podria no haver-hi trànsit en la data civil seleccionada; en aquest cas es mostra un avís.
+- Es conserva l’hora solar aparent i les correccions existents, així com el GPS optatiu, els controls manuals i el mode en directe.
 
-Nota científica: la longitud (no la latitud) determina la correcció horària geogràfica; la latitud sí intervé en la geometria del rellotge. L'hora solar aparent és aproximada segons el motor NOAA/Meeus ja existent.
-No s’han modificat els algorismes per determinar les marques horàries, el gnòmon o l’analema.
+El càlcul és una estimació basada en el motor NOAA/Meeus existent, NO una efemèride certificada amb precisió de segons.
+Els càlculs de les marques, del gnòmon i de l’analema no s’han alterat.
