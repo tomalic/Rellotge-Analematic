@@ -1,9 +1,14 @@
-ACTUALITZACIO DE LES ICONES Ar s A — PWA V9.6
+ArsA · Rellotge analemàtic V9.7 · Data, GPS i hora solar aparent
 
-1. A SiteGround, obre Gestor de fitxers i entra dins la carpeta on esta index.html.
-2. Puja-hi PRIMER els teus arxius originals logoArsA-192.png i logoArsA-512.png.
-3. Despres puja i substitueix index.html, manifest.webmanifest i sw.js d'aquest ZIP en aquesta MATEIXA carpeta.
-4. Recarrega la pagina. Si la icona de la PWA instal·lada no canvia, elimina la icona de la pantalla d'inici i torna a afegir la PWA.
+Puja tots els arxius d’aquest ZIP a la mateixa carpeta que index.html, substituint els anteriors.
+Mantén a la carpeta els teus dos fitxers logoArsA-192.png i logoArsA-512.png: no s’inclouen al ZIP perquè són teus.
 
-AQUEST ZIP NO INCLOU LES DUES IMATGES PNG: son les que has creat tu.
-No s'han modificat els calculs ni la resta d'arxius de la PWA.
+Canvis:
+- Ubicació GPS optativa (demana permís, HTTPS obligatori); latitud i longitud editables.
+- Data i hora obtingudes del dispositiu; editables manualment.
+- Opció de lectura en directe i opció de fus horari manual.
+- Hora solar aparent a la pàgina de disseny i desglossament de correcció de longitud/fus i equació del temps.
+- Fus automàtic del dispositiu, respectant l’horari d’estiu en la data triada. Si la localització és en un altre fus, usa el desfasament UTC manual.
+
+Nota científica: la longitud (no la latitud) determina la correcció horària geogràfica; la latitud sí intervé en la geometria del rellotge. L'hora solar aparent és aproximada segons el motor NOAA/Meeus ja existent.
+No s’han modificat els algorismes per determinar les marques horàries, el gnòmon o l’analema.

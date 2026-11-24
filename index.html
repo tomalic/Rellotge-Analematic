@@ -18,7 +18,7 @@
       <svg viewBox="0 0 40 40" width="38" height="38"><circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 4v6m0 20v6M4 20h6m20 0h6M8.7 8.7l4.2 4.2m14.2 14.2 4.2 4.2m0-22.6-4.2 4.2M12.9 27.1l-4.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
     <div class="brand-titles"><span class="brand-name">AstroMallorca <span class="brand-dot">·</span> Eines</span><span class="brand-subtitle">Rellotge analemàtic</span></div>
-    <div class="header-right"><span class="version-label">V 9.6</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
+    <div class="header-right"><span class="version-label">V 9.7</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
   </div>
 </header>
 <nav class="tab-navigation" aria-label="Seccions de l'aplicació">
@@ -33,18 +33,30 @@
 <main class="app-main">
   <section class="app-view active" id="view-disseny" role="tabpanel" aria-labelledby="tab-disseny">
     <div class="page-heading"><div><span class="eyebrow">01 / DISSENY</span><h1>Dissenya el teu rellotge</h1><p>Defineix el lloc i les dimensions. El plànol s'actualitza automàticament.</p></div></div>
+    <section class="surface solar-clock-surface" aria-labelledby="solar-clock-title">
+      <div class="solar-clock-intro"><span class="subheading">LECTURA SOLAR</span><h2 id="solar-clock-title">Hora solar aparent</h2><p>Per a la ubicació, la data i l’hora seleccionades.</p></div>
+      <div class="solar-clock-body">
+        <div class="solar-clock-primary"><strong id="solarTime" class="solar-time-digits">--:--:--</strong><span id="solarDayNote" class="solar-day-note"></span><span class="solar-clock-caption">Hora del Sol · 12:00 al migdia solar</span></div>
+        <div class="solar-clock-metrics"><div><span>Correcció longitud + fus</span><strong id="solarLongitudeCorrection">—</strong></div><div><span>Equació del temps</span><strong id="solarEquationCorrection">—</strong></div><div class="solar-clock-total"><span>Correcció total</span><strong id="solarTotalCorrection">—</strong></div></div>
+      </div>
+      <div class="solar-clock-footer"><span id="solarClockContext">Selecciona una data i una hora.</span><span id="solarClockMode">Lectura manual</span></div>
+    </section>
     <div class="design-grid">
       <section class="surface form-surface" aria-labelledby="design-settings-title">
         <div class="surface-heading"><div><span class="subheading">PARÀMETRES</span><h2 id="design-settings-title">Configuració</h2></div></div>
         <div class="field"><label for="name">Nom del projecte</label><input id="name" value="Rellotge de prova" autocomplete="off"></div>
-        <div class="field-grid"><div class="field"><label for="lat">Latitud <span class="unit">°</span></label><input id="lat" type="number" step="0.0001" value="39.5858" inputmode="decimal"></div><div class="field"><label for="lon">Longitud <span class="unit">°</span></label><input id="lon" type="number" step="0.0001" value="2.6586" inputmode="decimal"></div></div>
+        <div class="field-grid"><div class="field"><label for="lat">Latitud <span class="unit">°</span></label><input id="lat" type="number" min="-89" max="89" step="0.000001" value="39.5858" inputmode="decimal"></div><div class="field"><label for="lon">Longitud <span class="unit">°</span></label><input id="lon" type="number" min="-180" max="180" step="0.000001" value="2.6586" inputmode="decimal"></div></div>
+        <div class="device-control"><button type="button" id="useLocation" class="btn btn-secondary">⌖ &nbsp; Usar ubicació del dispositiu</button><p id="locationStatus" class="hint" role="status" aria-live="polite">Coordenades inicials de mostra. Pots introduir-ne unes altres.</p></div>
         <div class="field"><label for="a">Semieix major <span class="unit">metres</span></label><div class="input-suffix"><input id="a" type="number" step="0.1" min="0.5" value="2.5" inputmode="decimal"><span aria-hidden="true">m</span></div></div>
-        <div class="field"><label for="date">Dia de referència</label><input id="date" type="date" value="2026-11-02"></div>
+        <div class="field-grid"><div class="field"><label for="date">Data de referència</label><input id="date" type="date" value="2026-11-24"></div><div class="field"><label for="time">Hora oficial <span class="unit">hh:mm:ss</span></label><input id="time" type="time" step="1" value="12:00:00"></div></div>
+        <div class="device-actions"><button type="button" id="useDeviceTime" class="btn btn-secondary">◷ &nbsp; Data i hora del dispositiu</button><button type="button" id="toggleLive" class="btn btn-quiet" aria-pressed="false">Activar hora en directe</button></div>
+        <p class="hint device-hint">La ubicació, la data i l’hora es poden modificar manualment en qualsevol moment.</p>
         <details class="fold"><summary>Opcions horàries <span class="fold-hint">UTC · simulació</span></summary><div class="fold-content">
           <div class="field"><label for="step">Interval de marques</label><select id="step"><option value="1">Cada hora</option><option value="0.5">Cada mitja hora</option></select></div>
           <div class="field-grid"><div class="field"><label for="from">Primera hora UTC</label><input id="from" type="number" min="0" max="23" value="6"></div><div class="field"><label for="to">Darrera hora UTC</label><input id="to" type="number" min="1" max="24" value="18"></div></div>
-          <div class="field"><label for="time">Hora oficial de simulació</label><input id="time" type="time" value="12:00"></div>
-          <p class="hint">Les hores UTC defineixen les marques fixes. Hivern i estiu només canvien l'etiqueta horària.</p>
+          <div class="field"><label for="tzMode">Fus horari de l’hora introduïda</label><select id="tzMode"><option value="device">Automàtic · fus del dispositiu</option><option value="manual">Introduir desfasament UTC</option></select></div>
+          <div class="field" id="manualTimezoneField" hidden><label for="tzManual">Desfasament manual respecte d’UTC (hores)</label><input id="tzManual" type="number" min="-12" max="14" step="0.25" value="1" inputmode="decimal"><p class="hint">Per exemple, UTC+1 = 1; UTC−3 = -3. Inclou l’horari d’estiu, si correspon.</p></div>
+          <p class="hint">Si introdueixes coordenades d’un altre país, comprova el fus horari. Les hores UTC de les marques del rellotge continuen essent fixes.</p>
         </div></details>
         <div class="form-actions"><button type="button" id="save" class="btn btn-primary">Desar projecte</button><button type="button" id="reset" class="btn btn-quiet">Restablir</button></div>
         <p class="hint form-footnote">Les mesures de construcció s'expressen en metres.</p>
@@ -105,9 +117,9 @@
     <section class="surface technical"><details class="fold"><summary>Motor astronòmic i límits de precisió <span class="fold-hint">Informació tècnica</span></summary><div class="fold-content"><p class="hint"><strong>Motor:</strong> NOAA/Meeus local. Els punts diaris es calculen amb un ajust de mínims quadrats de la posició del gnòmon a les direccions solars de cada hora UTC mostrada, sempre que l'altura solar superi 15°. Les marques UTC són fixes sobre l'el·lipse i la taula mostra l'error angular residual aproximat en minuts. <strong>Cap ajust diari pot fer exactes simultàniament totes les hores.</strong> L'error de lectura real depèn també de l'ombra, del gruix de les marques i de la interpolació. Les etiquetes d'hivern i estiu són conversions UTC+1 i UTC+2; no són escales físiques independents. Verificau orientació i mesures in situ. No s'hi inclouen refracció atmosfèrica ni obstacles.</p><p id="simulation" class="hint"></p></div></details></section>
   </section>
 </main>
-<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.6</span></footer>
+<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.7</span></footer>
 <script>
-const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
+const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time','tzMode','tzManual'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
 // Motor solar unificat NOAA/Meeus: mateix càlcul per a analema, simulació i meridiana.
 // No és NREL SPA. Les magnituds són aproximades i requereixen validació de camp.
 function solarData(date){
@@ -196,13 +208,11 @@ function render(){
  $('hourCount').textContent=coords.length;
  $('dayCount').textContent=gnomonCoords.length;
  $('dayRows').innerHTML=gnomonCoords.map(v=>`<tr${v.date===date?' style="background:#fff0f6;font-weight:600"':''}><td>${v.date}</td><td>${v.x.toFixed(4)}</td><td>${v.y.toFixed(4)}</td><td>${v.eot.toFixed(3)}</td><td>${v.dec.toFixed(3)}</td><td>${Number.isFinite(v.rms)?v.rms.toFixed(2):'—'}</td><td>${Number.isFinite(v.max)?v.max.toFixed(2):'—'}</td></tr>`).join('');
- const [hour,minute]=$('time').value.split(':').map(Number),official=hour+minute/60;
- const dt=new Date(`${date}T12:00:00Z`);
- const madridOffset=(d=>{const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Madrid',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(d);const v=Object.fromEntries(parts.map(p=>[p.type,p.value]));return (Date.UTC(+v.year,+v.month-1,+v.day,+v.hour,+v.minute)-d.getTime())/3600000})(dt);
- const trueSolar=official-madridOffset+lon/15+eot/60;
- $('simulation').textContent=`Per al ${date}, declinació solar aproximada ${fmt(dec)}°, equació del temps ${fmt(eot)} min. Les marques UTC són fixes i l'analema diari es calcula per minimitzar l'error d'alineació. Simulació orientativa: hora solar vertadera ${timeLabel(trueSolar)} (fus Europe/Madrid calculat aproximadament). Les dates d’equinoccis i solsticis ressaltades són aproximades. Error RMS del dia: ${Number.isFinite(today.rms)?today.rms.toFixed(2):"—"} minuts; màxim: ${Number.isFinite(today.max)?today.max.toFixed(2):"—"} minuts.`;
+ const clock=calculateSolarClock();
+ const solarExplanation=clock?`Hora solar aparent ${clock.text} (${clock.zoneLabel}); correcció longitud/fus ${formatSignedMinutes(clock.longitudeCorrection)}, equació del temps ${formatSignedMinutes(clock.eot)}, correcció total ${formatSignedMinutes(clock.totalCorrection)}.`:'Revisa data, hora, longitud i fus horari.';
+ $('simulation').textContent=`Per al ${date}, declinació solar aproximada ${fmt(dec)}°, equació del temps diària a les 12 UTC ${fmt(eot)} min. Les marques UTC són fixes i l'analema diari es calcula per minimitzar l'error d'alineació. ${solarExplanation} Les dates d’equinoccis i solsticis ressaltades són aproximades. Error RMS del dia: ${Number.isFinite(today.rms)?today.rms.toFixed(2):"—"} minuts; màxim: ${Number.isFinite(today.max)?today.max.toFixed(2):"—"} minuts.`;
 }
-ids.forEach(id=>$(id).addEventListener('input',()=>{render()}));$('svg').onclick=()=>download('<?xml version="1.0" encoding="UTF-8"?>\n'+$('drawing').outerHTML,'rellotge-analematic.svg','image/svg+xml');$('csv').onclick=()=>download('\ufeffUTC;X est (m);Y nord (m);Hivern;Estiu\n'+coords.map(v=>[timeLabel(v.h),fmt(v.x),fmt(v.y),timeLabel(v.h+1),timeLabel(v.h+2)].join(';')).join('\n'),'coordenades-rellotge.csv','text/csv');$('gnomonCSV').onclick=()=>download('\ufeffData;X est (m);Y nord (m);Equació del temps (min);Declinació (graus);Error RMS aproximat (min);Error màxim aproximat (min);Mostres\n'+gnomonCoords.map(v=>[v.date,v.x.toFixed(4),v.y.toFixed(4),v.eot.toFixed(4),v.dec.toFixed(4),v.rms.toFixed(3),v.max.toFixed(3),v.count].join(';')).join('\n'),'gnomon-diari-ajustat.csv','text/csv');$('print').onclick=()=>window.print();$('save').onclick=()=>{localStorage.setItem('rellotge-analematic-v1',JSON.stringify(Object.fromEntries(ids.map(i=>[i,$(i).value]))));alert('Projecte desat en aquest navegador.')};$('reset').onclick=()=>{localStorage.removeItem('rellotge-analematic-v1');location.reload()};try{let saved=JSON.parse(localStorage.getItem('rellotge-analematic-v1'));if(saved)ids.forEach(i=>{if(saved[i]!=null)$(i).value=saved[i]})}catch{}
+ids.forEach(id=>$(id).addEventListener('input',()=>{render()}));$('svg').onclick=()=>download('<?xml version="1.0" encoding="UTF-8"?>\n'+$('drawing').outerHTML,'rellotge-analematic.svg','image/svg+xml');$('csv').onclick=()=>download('\ufeffUTC;X est (m);Y nord (m);Hivern;Estiu\n'+coords.map(v=>[timeLabel(v.h),fmt(v.x),fmt(v.y),timeLabel(v.h+1),timeLabel(v.h+2)].join(';')).join('\n'),'coordenades-rellotge.csv','text/csv');$('gnomonCSV').onclick=()=>download('\ufeffData;X est (m);Y nord (m);Equació del temps (min);Declinació (graus);Error RMS aproximat (min);Error màxim aproximat (min);Mostres\n'+gnomonCoords.map(v=>[v.date,v.x.toFixed(4),v.y.toFixed(4),v.eot.toFixed(4),v.dec.toFixed(4),v.rms.toFixed(3),v.max.toFixed(3),v.count].join(';')).join('\n'),'gnomon-diari-ajustat.csv','text/csv');$('print').onclick=()=>window.print();$('save').onclick=()=>{localStorage.setItem('rellotge-analematic-v1',JSON.stringify(Object.fromEntries(ids.map(i=>[i,$(i).value]))));alert('Projecte desat en aquest navegador.')};$('reset').onclick=()=>{localStorage.removeItem('rellotge-analematic-v1');location.reload()};let hasSavedProject=false;try{let saved=JSON.parse(localStorage.getItem('rellotge-analematic-v1'));if(saved){hasSavedProject=true;ids.forEach(i=>{if(saved[i]!=null)$(i).value=saved[i]})}}catch{}
 // Algoritme solar aproximat (Meeus/NOAA); no és implementació ni certificació NREL SPA.
 function solarAzimuth(instant,lat,lon){
  const jd=instant.getTime()/86400000+2440587.5,T=(jd-2451545)/36525;
@@ -222,7 +232,42 @@ function solarAzimuth(instant,lat,lon){
  const az=norm(Math.atan2(Math.sin(ha),Math.cos(ha)*Math.sin(phi)-Math.tan(decl)*Math.cos(phi))/rad+180);
  return {az,alt:alt/rad,decl:decl/rad,eot:E,ha:ha/rad};
 }
+// Hora solar aparent a partir de l'instant exacte, longitud i equació del temps.
+// El fus horari del navegador és el de l'hora CIVIL seleccionada, no es dedueix del GPS.
+function formatSignedMinutes(value){
+ if(!Number.isFinite(value))return '—';
+ const sign=value<0?'−':'+';const seconds=Math.round(Math.abs(value)*60);
+ return `${sign}${Math.floor(seconds/60)} min ${String(seconds%60).padStart(2,'0')} s`;
+}
+function calculateSolarClock(){
+ const date=$('date').value,time=$('time').value,lat=+$('lat').value,lon=+$('lon').value;
+ if($('lat').value===''||$('lon').value===''||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^\d{2}:\d{2}(?::\d{2})?$/.test(time)||!Number.isFinite(lat)||Math.abs(lat)>90||!Number.isFinite(lon)||Math.abs(lon)>180)return null;
+ const [hh,mm,ss=0]=time.split(':').map(Number);
+ if(hh>23||mm>59||ss>59)return null;
+ const [yr,mo,day]=date.split('-').map(Number),civilMinutes=hh*60+mm+ss/60;
+ let instant,offsetHours,zoneLabel;
+ if($('tzMode').value==='manual'){
+  offsetHours=Number($('tzManual').value);
+  if(!Number.isFinite(offsetHours)||offsetHours< -12||offsetHours>14||$('tzManual').value==='')return null;
+  instant=new Date(Date.UTC(yr,mo-1,day,hh,mm,ss)-offsetHours*3600000);
+  zoneLabel=`UTC${offsetHours>=0?'+':'−'}${Math.abs(offsetHours).toString().replace('.',',')}`;
+ }else{
+  instant=new Date(`${date}T${time}`);
+  if(Number.isNaN(instant.getTime()))return null;
+  offsetHours=-instant.getTimezoneOffset()/60;
+  const zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'dispositiu';
+  zoneLabel=`${zone} · UTC${offsetHours>=0?'+':'−'}${Math.abs(offsetHours).toString().replace('.',',')}`;
+ }
+ if(Number.isNaN(instant.getTime()))return null;
+ // UTC+offset defines the clock's zone meridian (15° per hour).
+ const longitudeCorrection=4*(lon-15*offsetHours),eot=solarAzimuth(instant,lat,lon).eot,totalCorrection=longitudeCorrection+eot;
+ const unwrapped=civilMinutes+totalCorrection,secondsOfDay=Math.round(unwrapped*60);
+ const dayShift=Math.floor(secondsOfDay/86400),sec=((secondsOfDay%86400)+86400)%86400;
+ const text=[Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(v=>String(v).padStart(2,'0')).join(':');
+ return {instant,offsetHours,zoneLabel,longitudeCorrection,eot,totalCorrection,text,dayShift};
+}
 render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 </script>
+<script src="solar-clock.js"></script>
 <script src="ui.js"></script>
 </body></html>
