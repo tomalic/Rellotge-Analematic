@@ -1,15 +1,46 @@
-ArsA · Rellotge analemàtic V9.8 · Migdia solar
+ArsA · Rellotge de sol analemàtic · V9.9 (Vista 3D)
+AstroMallorca · 26 novembre 2026
 
-Puja tots els arxius d’aquest ZIP a la mateixa carpeta que index.html, substituint els anteriors.
-Mantén els fitxers logoArsA-192.png i logoArsA-512.png de la teva instal·lació: no s’inclouen al ZIP.
+NOVETATS
+- Pestanya Vista 3D amb projecció perspectiva interactiva, girar amb ratolí/dit,
+  zoom, vista zenital i controls de càmera accessibles.
+- Lliscadors de data (365/366 dies) i hora oficial (minut a minut).
+- Visualització de l'ombra real segons azimut, altura solar, latitud,
+  longitud, hora/fus seleccionat i alçada del gnòmon.
+- Model persona o vareta vertical, amb alçada configurable a Disseny.
+- Escala de l'el·lipse, marques horàries i punt diari del gnòmon
+  sincronitzats amb el plànol 2D i l'analema de la mateixa app.
+- Compatible amb mòbil, tauleta i ordinador; funciona sense xarxa
+  una vegada instal·lat i emmagatzemat en memòria cau.
 
-Nou a la versió 9.8:
-- A la pantalla Disseny, sota l’hora solar aparent, apareix l’hora civil del migdia solar (trànsit superior) per a la data i la longitud seleccionades.
-- L’hora del migdia es calcula iterativament perquè l’equació del temps correspon a l’instant del trànsit, i no simplement a les 12 h UTC.
-- El resultat incorpora el fus horari automàtic del dispositiu per a aquella data (incloent l’horari d’estiu) o el desfasament UTC manual.
-- L’hora del migdia solar s’actualitza si canvies data, longitud o fus horari; no canvia pel fet d’avançar l’hora dins un mateix dia.
-- Amb fusos incompatibles amb la longitud podria no haver-hi trànsit en la data civil seleccionada; en aquest cas es mostra un avís.
-- Es conserva l’hora solar aparent i les correccions existents, així com el GPS optatiu, els controls manuals i el mode en directe.
+INSTAL·LACIÓ
+1. Descomprimeix el ZIP i puja tots els arxius a la carpeta de la PWA
+   a SiteGround (mateixa ubicació que index.html).
+2. Mantén els teus logos logoArsA-192.png i logoArsA-512.png en aquesta carpeta.
+3. La nova versió del Service Worker es diu v9-9-3d-model.
+4. Prova primer els fitxers en una carpeta de proves i després substitueix-los.
 
-El càlcul és una estimació basada en el motor NOAA/Meeus existent, NO una efemèride certificada amb precisió de segons.
-Els càlculs de les marques, del gnòmon i de l’analema no s’han alterat.
+LÍMITS
+- La vista 3D fa servir Canvas 2D amb càmera perspectiva giratòria.
+  No requereix motors 3D ni dependències de xarxa.
+- El càlcul solar continua amb NOAA/Meeus i no és NREL SPA.
+- La longitud d'ombra = alçada / tan(altura solar) assumeix terreny pla
+  i element vertical. La forma d'ombra d'una persona és representativa,
+  no una simulació fotomètrica o de l'anatomia exacta.
+- Amb el Sol per sota de l'horitzó no hi ha ombra. Les ombres molt
+  llargues es retallen al límit de la visualització, però es mostren
+  amb la longitud calculada completa.
+- La precisió del rellotge s'ha de verificar físicament al lloc.
+
+FITXERS AFEGITS
+- simulacio-3d.js
+- simulacio-3d.css
+
+FITXERS EXISTENTS ACTUALITZATS
+- index.html
+- ui.css
+- ui.js
+- solar-clock.js
+- sw.js
+
+La resta de càlculs, exports i mètodes de meridiana s'han conservat.

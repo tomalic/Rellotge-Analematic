@@ -1,0 +1,34 @@
+/* ArsA v9.9 · visor 3D natiu, responsive, sense llibreries externes */
+.simulation-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(285px,340px);gap:18px;align-items:start}
+.scene-surface{padding:14px;overflow:hidden}
+.scene-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:4px 6px 12px;flex-wrap:wrap}
+.scene-badge{font-size:11px;font-weight:800;color:#1e736c;background:#eaf6f3;border-radius:7px;padding:7px 10px}
+.scene-canvas-wrap{position:relative;border-radius:14px;overflow:hidden;border:1px solid #ccdbde;background:#e9f3f4}
+#scene3d{display:block;width:100%;height:clamp(365px,58vh,680px);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#scene3d:active{cursor:grabbing}
+.scene-instructions{position:absolute;bottom:12px;left:12px;right:12px;pointer-events:none;font-size:11px;line-height:1.35;color:#345963;text-align:center;background:rgba(255,255,255,.82);backdrop-filter:blur(4px);padding:7px 10px;border-radius:9px}
+.scene-camera-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:12px 3px 2px}
+.scene-camera-actions button{border:1px solid #d9e6e7;border-radius:9px;background:#f8fbfb;color:#1d535e;font-weight:730;font-size:12px;min-width:39px;min-height:36px;padding:7px 10px}
+.scene-camera-actions button:hover{background:#e8f5f4}
+.scene-controls{display:grid;gap:17px;padding:20px}
+.scene-controls .surface-heading{margin-bottom:1px}
+.scene-range{display:grid;gap:8px}
+.scene-range-line{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.scene-range-line label{font-size:13px;font-weight:700;color:#36515b}
+.scene-range-line output{font-size:13px;color:#137671;font-weight:750;text-align:right}
+.scene-range input[type=range]{appearance:none;-webkit-appearance:none;width:100%;height:6px;outline:0;border-radius:30px;background:linear-gradient(90deg,#c4e2dc,#4aafa2);margin:12px 0;accent-color:#147d78}
+.scene-range input[type=range]::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border:3px solid #fff;background:#147d78;border-radius:50%;box-shadow:0 1px 5px #7a9e9d;cursor:pointer}
+.scene-range input[type=range]::-moz-range-thumb{width:17px;height:17px;border:2px solid #fff;background:#147d78;border-radius:50%;cursor:pointer}
+.scene-range-limits{display:flex;justify-content:space-between;font-size:11px;color:#83969d}
+.scene-toggle-row{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#465e69}
+.scene-toggle-row label{display:flex;align-items:center;gap:7px;cursor:pointer}
+.scene-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scene-metric{border:1px solid #dfe9ea;background:#f8fbfa;border-radius:11px;padding:12px;display:grid;gap:4px;min-width:0}
+.scene-metric span{font-size:11px;line-height:1.35;color:#70848c}.scene-metric strong{font-size:18px;color:#183b49;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.scene-small-data{display:grid;gap:9px;border-top:1px solid #e3eded;padding-top:14px;font-size:12px}.scene-small-data>div{display:flex;gap:10px;justify-content:space-between;align-items:center}.scene-small-data span{color:#73868c}.scene-small-data strong{color:#294b58;text-align:right;font-variant-numeric:tabular-nums}
+.scene-tip{font-size:12px;line-height:1.6;color:#6b8089;margin:0}
+.scene-technical-note{font-size:11px;line-height:1.65;color:#6c8087;margin:2px 4px 0}
+.scene-main-link{margin-top:9px}
+@media (max-width:930px){.simulation-layout{grid-template-columns:1fr}.scene-controls{grid-template-columns:1fr 1fr;column-gap:20px}.scene-controls .surface-heading,.scene-controls .scene-metrics,.scene-controls .scene-small-data,.scene-controls .scene-tip,.scene-controls .scene-toggle-row,.scene-controls .scene-main-link{grid-column:1/-1}}
+@media (max-width:600px){.simulation-layout{gap:12px}.scene-surface{padding:8px}.scene-toolbar{padding:8px}.scene-controls{display:grid;grid-template-columns:1fr;padding:16px;gap:13px}.scene-controls .surface-heading,.scene-controls .scene-metrics,.scene-controls .scene-small-data,.scene-controls .scene-tip,.scene-controls .scene-toggle-row,.scene-controls .scene-main-link{grid-column:auto}.scene-canvas-wrap{border-radius:11px}#scene3d{height:clamp(340px,51vh,500px)}.scene-instructions{font-size:10px}.scene-camera-actions button{font-size:12px}.scene-metric strong{font-size:17px}}
+@media print{#view-simulacio{display:none!important}}

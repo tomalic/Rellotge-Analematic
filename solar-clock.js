@@ -86,6 +86,7 @@
   // L'analema depèn de la data i només es recalcula quan canvia el dia.
   if(recompute&&dateChanged)triggerDateRender();
   updateSolarReadout();
+  window.dispatchEvent(new Event('arsa-clock-tick'));
  }
  function toggleLive(on){
   live=Boolean(on);

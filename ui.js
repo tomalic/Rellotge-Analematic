@@ -1,7 +1,7 @@
 /* UI V9.6: navegació i visualització de lectura; no recalcula les efemèrides. */
 (function(){
   'use strict';
-  const tabs=['disseny','analema','construccio','meridiana','ajuda'];
+  const tabs=['disseny','simulacio','analema','construccio','meridiana','ajuda'];
   const $=id=>document.getElementById(id);
   const safe=v=>Number.isFinite(v)?v.toFixed(4):'—';
   function activate(name,updateHash){
@@ -13,6 +13,7 @@
     });
     if(updateHash) history.replaceState(null,'','#'+name);
     if(name==='analema') drawAnalemma();
+    if(window.Arsa3D){if(name==='simulacio')window.Arsa3D.activate();else window.Arsa3D.deactivate();}
     window.scrollTo({top:0,behavior:'instant'});
   }
   document.querySelectorAll('[data-tab]').forEach(el=>el.addEventListener('click',()=>activate(el.dataset.tab,true)));
@@ -45,7 +46,7 @@
     $('analemmaDrawing').innerHTML=s;
   }
   $('analemmaDate').addEventListener('input',()=>{$('date').value=$('analemmaDate').value;$('date').dispatchEvent(new Event('input',{bubbles:true}));drawAnalemma()});
-  ['name','lat','lon','a','step','from','to','date','time'].forEach(id=>$(id).addEventListener('input',drawAnalemma));
+  ['name','lat','lon','a','step','from','to','date','time','gnomonType','gnomonHeight'].forEach(id=>$(id).addEventListener('input',drawAnalemma));
   document.querySelector('.nav-inner').addEventListener('keydown',e=>{
     if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
     const current=tabs.findIndex(t=>$('tab-'+t).classList.contains('active'));

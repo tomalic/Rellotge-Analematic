@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="logoArsA-192.png">
 <link rel="apple-touch-icon" sizes="192x192" href="logoArsA-192.png">
 <link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="simulacio-3d.css">
 <title>Rellotge analemàtic · AstroMallorca</title>
 </head>
 <body class="app-shell">
@@ -18,12 +19,13 @@
       <svg viewBox="0 0 40 40" width="38" height="38"><circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 4v6m0 20v6M4 20h6m20 0h6M8.7 8.7l4.2 4.2m14.2 14.2 4.2 4.2m0-22.6-4.2 4.2M12.9 27.1l-4.2 4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
     <div class="brand-titles"><span class="brand-name">AstroMallorca <span class="brand-dot">·</span> Eines</span><span class="brand-subtitle">Rellotge analemàtic</span></div>
-    <div class="header-right"><span class="version-label">V 9.8</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
+    <div class="header-right"><span class="version-label">V 9.9</span><span class="local-label"><span class="status-dot"></span> Càlcul local</span></div>
   </div>
 </header>
 <nav class="tab-navigation" aria-label="Seccions de l'aplicació">
   <div class="nav-inner" role="tablist" aria-label="Pantalles principals">
     <button type="button" class="nav-tab active" id="tab-disseny" data-tab="disseny" role="tab" aria-controls="view-disseny" aria-selected="true"><span class="nav-symbol" aria-hidden="true">◉</span><span>Disseny</span></button>
+    <button type="button" class="nav-tab" id="tab-simulacio" data-tab="simulacio" role="tab" aria-controls="view-simulacio" aria-selected="false"><span class="nav-symbol" aria-hidden="true">◫</span><span>Vista 3D</span></button>
     <button type="button" class="nav-tab" id="tab-analema" data-tab="analema" role="tab" aria-controls="view-analema" aria-selected="false"><span class="nav-symbol" aria-hidden="true">∞</span><span>Analema</span></button>
     <button type="button" class="nav-tab" id="tab-construccio" data-tab="construccio" role="tab" aria-controls="view-construccio" aria-selected="false"><span class="nav-symbol" aria-hidden="true">⌗</span><span>Construcció</span></button>
     <button type="button" class="nav-tab" id="tab-meridiana" data-tab="meridiana" role="tab" aria-controls="view-meridiana" aria-selected="false"><span class="nav-symbol" aria-hidden="true">↟</span><span>Meridiana</span></button>
@@ -49,6 +51,8 @@
         <div class="field-grid"><div class="field"><label for="lat">Latitud <span class="unit">°</span></label><input id="lat" type="number" min="-89" max="89" step="0.000001" value="39.5858" inputmode="decimal"></div><div class="field"><label for="lon">Longitud <span class="unit">°</span></label><input id="lon" type="number" min="-180" max="180" step="0.000001" value="2.6586" inputmode="decimal"></div></div>
         <div class="device-control"><button type="button" id="useLocation" class="btn btn-secondary">⌖ &nbsp; Usar ubicació del dispositiu</button><p id="locationStatus" class="hint" role="status" aria-live="polite">Coordenades inicials de mostra. Pots introduir-ne unes altres.</p></div>
         <div class="field"><label for="a">Semieix major <span class="unit">metres</span></label><div class="input-suffix"><input id="a" type="number" step="0.1" min="0.5" value="2.5" inputmode="decimal"><span aria-hidden="true">m</span></div></div>
+        <div class="field-grid"><div class="field"><label for="gnomonType">Element que fa l'ombra</label><select id="gnomonType"><option value="persona">Persona</option><option value="vareta">Vareta vertical</option></select></div><div class="field"><label for="gnomonHeight">Alçada <span class="unit">metres</span></label><div class="input-suffix"><input id="gnomonHeight" type="number" min="0.10" max="20" step="0.05" value="1.70" inputmode="decimal"><span aria-hidden="true">m</span></div></div></div>
+        <p class="hint">L'alçada es pot adaptar al model real. No modifica les marques horàries ni l'analema.</p>
         <div class="field-grid"><div class="field"><label for="date">Data de referència</label><input id="date" type="date" value="2026-11-24"></div><div class="field"><label for="time">Hora oficial <span class="unit">hh:mm:ss</span></label><input id="time" type="time" step="1" value="12:00:00"></div></div>
         <div class="device-actions"><button type="button" id="useDeviceTime" class="btn btn-secondary">◷ &nbsp; Data i hora del dispositiu</button><button type="button" id="toggleLive" class="btn btn-quiet" aria-pressed="false">Activar hora en directe</button></div>
         <p class="hint device-hint">La ubicació, la data i l’hora es poden modificar manualment en qualsevol moment.</p>
@@ -67,9 +71,34 @@
         <div class="legend"><span class="solar">UTC</span><span class="solar-hours">Solar (romans)</span><span class="winter">Hivern</span><span class="summer">Estiu</span><span class="analemma">Gnòmon</span></div>
         <div class="drawing-frame"><svg id="drawing" viewBox="0 0 800 680" role="img" aria-label="Plànol geomètric del rellotge"></svg></div>
         <div class="stat"><div><span>Semieix menor B</span><strong id="bval">—</strong></div><div><span>Focus F1–F2</span><strong id="cval">—</strong></div><div><span>Gnòmon · dia seleccionat</span><strong id="gval">—</strong></div></div>
-        <div class="plan-footer"><span>Plànol orientatiu a escala de pantalla</span><button type="button" class="inline-action" data-goto="construccio">Veure mesures de construcció <span aria-hidden="true">→</span></button></div>
+        <div class="plan-footer"><span>Plànol orientatiu a escala de pantalla</span><button class="inline-action" type="button" data-goto="simulacio">Veure en 3D ↗</button><button type="button" class="inline-action" data-goto="construccio">Veure mesures de construcció <span aria-hidden="true">→</span></button></div>
       </section>
     </div>
+  </section>
+
+  <section class="app-view" id="view-simulacio" role="tabpanel" aria-labelledby="tab-simulacio" hidden>
+    <div class="page-heading"><div><span class="eyebrow">02 / SIMULACIÓ</span><h1>El rellotge en 3D</h1><p>Gira el model i observa l'ombra solar a qualsevol data i hora, amb les dimensions de Disseny.</p></div></div>
+    <div class="simulation-layout">
+      <section class="surface scene-surface" aria-label="Model tridimensional interactiu del rellotge">
+        <div class="scene-toolbar"><span class="subheading">RELLOTGE SOLAR · VISUALITZACIÓ</span><span id="scene3dState" class="scene-badge">Ombra calculada</span></div>
+        <div class="scene-canvas-wrap"><canvas id="scene3d" role="img" aria-label="Simulació tridimensional del rellotge analemàtic. Gira amb el dit o el ratolí, acosta amb dos dits i canvia la vista amb els botons."></canvas>
+          <div class="scene-instructions">Arrossega per girar · Pessiga o usa la roda per acostar · Ombres sobre terreny pla</div>
+        </div>
+        <div class="scene-camera-actions" aria-label="Controls de càmera"><button id="sceneLeft" type="button" aria-label="Girar a l'esquerra">↶</button><button id="sceneRight" type="button" aria-label="Girar a la dreta">↷</button><button id="sceneZoomIn" type="button" aria-label="Apropar">+</button><button id="sceneZoomOut" type="button" aria-label="Allunyar">−</button><button id="sceneTop" type="button">Vista zenital</button><button id="sceneResetCamera" type="button">Restablir vista</button></div>
+      </section>
+      <aside class="surface scene-controls">
+        <div class="surface-heading"><div><span class="subheading">CONTROL TEMPORAL</span><h2>Simula el moviment del Sol</h2></div></div>
+        <div class="scene-range"><div class="scene-range-line"><label for="sceneDay">Data</label><output id="sceneDateLabel" for="sceneDay">—</output></div><input id="sceneDay" type="range" min="0" max="364" step="1" value="0"><div class="scene-range-limits"><span>1 gen.</span><span>31 des.</span></div></div>
+        <div class="scene-range"><div class="scene-range-line"><label for="sceneHour">Hora oficial</label><output id="sceneHourLabel" for="sceneHour">—</output></div><input id="sceneHour" type="range" min="0" max="1439" step="1" value="720"><div class="scene-range-limits"><span>00:00</span><span>12:00</span><span>23:59</span></div></div>
+        <button class="btn btn-secondary btn-block" id="sceneNow" type="button">◷ &nbsp; Ara · hora del dispositiu</button>
+        <div class="scene-metrics"><div class="scene-metric"><span>Altura del Sol</span><strong id="sceneAltitude">—</strong></div><div class="scene-metric"><span>Azimut solar</span><strong id="sceneAzimuth">—</strong></div><div class="scene-metric"><span>Longitud de l'ombra</span><strong id="sceneShadow">—</strong></div><div class="scene-metric"><span>Dimensions del rellotge</span><strong id="scene3dSize">—</strong></div></div>
+        <div class="scene-small-data"><div><span>Alçada de la figura</span><strong id="scene3dHeight">—</strong></div><div><span>Posició del gnòmon</span><strong id="sceneGnomonPoint">—</strong></div></div>
+        <div class="scene-toggle-row"><label><input type="checkbox" id="sceneShowHours" checked> Mostrar hores</label><label><input type="checkbox" id="sceneShowAnalemma" checked> Mostrar analema</label></div>
+        <p class="scene-tip" id="scene3dNote" role="status">La simulació mostra el mateix model configurat a Disseny.</p>
+        <button class="btn btn-quiet btn-block scene-main-link" data-goto="disseny" type="button">Modificar el model a Disseny ↗</button>
+      </aside>
+    </div>
+    <p class="scene-technical-note">Projecció 3D en perspectiva. L'altura i l'azimut solars provenen del motor NOAA/Meeus de l'app. La longitud de l'ombra suposa un terreny horitzontal i un gnòmon vertical; la silueta d'una persona és esquemàtica. No substitueix la comprovació al lloc.</p>
   </section>
   <section class="app-view" id="view-analema" role="tabpanel" aria-labelledby="tab-analema" hidden>
     <div class="page-heading"><div><span class="eyebrow">02 / ANALEMA</span><h1>Posició diària del gnòmon</h1><p>Explora el traçat anual i consulta la posició del dia que construiràs.</p></div></div>
@@ -118,9 +147,9 @@
     <section class="surface technical"><details class="fold"><summary>Motor astronòmic i límits de precisió <span class="fold-hint">Informació tècnica</span></summary><div class="fold-content"><p class="hint"><strong>Motor:</strong> NOAA/Meeus local. Els punts diaris es calculen amb un ajust de mínims quadrats de la posició del gnòmon a les direccions solars de cada hora UTC mostrada, sempre que l'altura solar superi 15°. Les marques UTC són fixes sobre l'el·lipse i la taula mostra l'error angular residual aproximat en minuts. <strong>Cap ajust diari pot fer exactes simultàniament totes les hores.</strong> L'error de lectura real depèn també de l'ombra, del gruix de les marques i de la interpolació. Les etiquetes d'hivern i estiu són conversions UTC+1 i UTC+2; no són escales físiques independents. Verificau orientació i mesures in situ. No s'hi inclouen refracció atmosfèrica ni obstacles.</p><p id="simulation" class="hint"></p></div></details></section>
   </section>
 </main>
-<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.8</span></footer>
+<footer class="app-footer"><span>AstroMallorca · Rellotges de sol</span><span>Els càlculs es fan al dispositiu · V 9.9</span></footer>
 <script>
-const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time','tzMode','tzManual'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
+const $=id=>document.getElementById(id), ids=['name','lat','lon','a','step','from','to','date','time','tzMode','tzManual','gnomonType','gnomonHeight'];const rad=Math.PI/180;const fmt=n=>Number(n).toFixed(2);let coords=[];let gnomonCoords=[];let lastMeridian=null;
 // Motor solar unificat NOAA/Meeus: mateix càlcul per a analema, simulació i meridiana.
 // No és NREL SPA. Les magnituds són aproximades i requereixen validació de camp.
 function solarData(date){
@@ -213,7 +242,8 @@ function render(){
  const solarExplanation=clock?`Hora solar aparent ${clock.text} (${clock.zoneLabel}); correcció longitud/fus ${formatSignedMinutes(clock.longitudeCorrection)}, equació del temps ${formatSignedMinutes(clock.eot)}, correcció total ${formatSignedMinutes(clock.totalCorrection)}.`:'Revisa data, hora, longitud i fus horari.';
  $('simulation').textContent=`Per al ${date}, declinació solar aproximada ${fmt(dec)}°, equació del temps diària a les 12 UTC ${fmt(eot)} min. Les marques UTC són fixes i l'analema diari es calcula per minimitzar l'error d'alineació. ${solarExplanation} Les dates d’equinoccis i solsticis ressaltades són aproximades. Error RMS del dia: ${Number.isFinite(today.rms)?today.rms.toFixed(2):"—"} minuts; màxim: ${Number.isFinite(today.max)?today.max.toFixed(2):"—"} minuts.`;
 }
-ids.forEach(id=>$(id).addEventListener('input',()=>{render()}));$('svg').onclick=()=>download('<?xml version="1.0" encoding="UTF-8"?>\n'+$('drawing').outerHTML,'rellotge-analematic.svg','image/svg+xml');$('csv').onclick=()=>download('\ufeffUTC;X est (m);Y nord (m);Hivern;Estiu\n'+coords.map(v=>[timeLabel(v.h),fmt(v.x),fmt(v.y),timeLabel(v.h+1),timeLabel(v.h+2)].join(';')).join('\n'),'coordenades-rellotge.csv','text/csv');$('gnomonCSV').onclick=()=>download('\ufeffData;X est (m);Y nord (m);Equació del temps (min);Declinació (graus);Error RMS aproximat (min);Error màxim aproximat (min);Mostres\n'+gnomonCoords.map(v=>[v.date,v.x.toFixed(4),v.y.toFixed(4),v.eot.toFixed(4),v.dec.toFixed(4),v.rms.toFixed(3),v.max.toFixed(3),v.count].join(';')).join('\n'),'gnomon-diari-ajustat.csv','text/csv');$('print').onclick=()=>window.print();$('save').onclick=()=>{localStorage.setItem('rellotge-analematic-v1',JSON.stringify(Object.fromEntries(ids.map(i=>[i,$(i).value]))));alert('Projecte desat en aquest navegador.')};$('reset').onclick=()=>{localStorage.removeItem('rellotge-analematic-v1');location.reload()};let hasSavedProject=false;try{let saved=JSON.parse(localStorage.getItem('rellotge-analematic-v1'));if(saved){hasSavedProject=true;ids.forEach(i=>{if(saved[i]!=null)$(i).value=saved[i]})}}catch{}
+ids.filter(id=>!['time','gnomonType','gnomonHeight'].includes(id)).forEach(id=>$(id).addEventListener('input',render));
+let timeRenderTimer; $('time').addEventListener('input',()=>{clearTimeout(timeRenderTimer);timeRenderTimer=setTimeout(render,400)});$('svg').onclick=()=>download('<?xml version="1.0" encoding="UTF-8"?>\n'+$('drawing').outerHTML,'rellotge-analematic.svg','image/svg+xml');$('csv').onclick=()=>download('\ufeffUTC;X est (m);Y nord (m);Hivern;Estiu\n'+coords.map(v=>[timeLabel(v.h),fmt(v.x),fmt(v.y),timeLabel(v.h+1),timeLabel(v.h+2)].join(';')).join('\n'),'coordenades-rellotge.csv','text/csv');$('gnomonCSV').onclick=()=>download('\ufeffData;X est (m);Y nord (m);Equació del temps (min);Declinació (graus);Error RMS aproximat (min);Error màxim aproximat (min);Mostres\n'+gnomonCoords.map(v=>[v.date,v.x.toFixed(4),v.y.toFixed(4),v.eot.toFixed(4),v.dec.toFixed(4),v.rms.toFixed(3),v.max.toFixed(3),v.count].join(';')).join('\n'),'gnomon-diari-ajustat.csv','text/csv');$('print').onclick=()=>window.print();$('save').onclick=()=>{localStorage.setItem('rellotge-analematic-v1',JSON.stringify(Object.fromEntries(ids.map(i=>[i,$(i).value]))));alert('Projecte desat en aquest navegador.')};$('reset').onclick=()=>{localStorage.removeItem('rellotge-analematic-v1');location.reload()};let hasSavedProject=false;try{let saved=JSON.parse(localStorage.getItem('rellotge-analematic-v1'));if(saved){hasSavedProject=true;ids.forEach(i=>{if(saved[i]!=null)$(i).value=saved[i]})}}catch{}
 // Algoritme solar aproximat (Meeus/NOAA); no és implementació ni certificació NREL SPA.
 function solarAzimuth(instant,lat,lon){
  const jd=instant.getTime()/86400000+2440587.5,T=(jd-2451545)/36525;
@@ -271,4 +301,5 @@ render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js'
 </script>
 <script src="solar-clock.js"></script>
 <script src="ui.js"></script>
+<script src="simulacio-3d.js"></script>
 </body></html>

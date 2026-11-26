@@ -41,3 +41,8 @@
 .solar-noon-time{font-size:clamp(27px,2.6vw,36px);letter-spacing:-.035em;line-height:1.2;color:#204558;font-weight:770;font-variant-numeric:tabular-nums}
 .solar-noon-note{font-size:10px;color:#637a81;line-height:1.45}
 @media(max-width:670px){.solar-noon{margin-top:12px;padding-top:11px}.solar-noon-time{font-size:31px}}
+
+/* Sis pantalles en amplades reduïdes */
+@media(max-width:520px){.nav-inner{justify-content:space-around;padding:0 2px;gap:0}.nav-tab{min-width:0;padding:5px 6px;font-size:10px}.nav-symbol{font-size:17px;min-width:15px}}
+@media(min-width:521px) and (max-width:800px){.nav-tab{padding:5px 10px}}
+@media(max-width:670px){.nav-inner{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));justify-content:stretch;padding:0 2px}.nav-tab{min-width:0;min-height:60px;padding:5px 1px;gap:3px;font-size:9.4px;white-space:nowrap}.nav-symbol{font-size:19px;min-width:0}}
